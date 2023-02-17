@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "DUX Web CLI",
   "main": "./index.js",
+  "homepage": "https://github.com/ShaoGongBra/duxweb-cli",
   "directories": {
     "test": "test"
   },
