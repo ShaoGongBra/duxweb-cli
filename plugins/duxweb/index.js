@@ -13,11 +13,17 @@ const pages = () => {
     }
     const watched = watcher.getWatched()
     const list = Object.keys(watched)
+      .filter(key => {
+        if (!watched[key].includes('index.js')) {
+          return false
+        }
+        return true
+      })
       .map(key => {
         const paths = key.split(sep)
         return paths.slice(-2)
       })
-    const template = `import { registerRoutes, menu } from 'duxweb'
+    const template = `import { registerRoutes } from 'duxweb'
     
 ${list.map(v => `import { duxwebData as ${v[1]}${v[0]} } from './app/${v[0]}/${v[1]}'`).join('\n')}
 
@@ -99,4 +105,4 @@ const copy = () => {
   }
 }
 
-module.exports = () => [pages(),copy()]
+module.exports = () => [copy(), pages()]
