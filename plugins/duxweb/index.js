@@ -72,7 +72,7 @@ const copy = () => {
     }
   }
   const editFile = file => {
-    const [, app, , ...dir] = file.split('/')
+    const [, app, , ...dir] = file.split(sep)
     const destApp = app[0].toLocaleLowerCase() + app.substring(1)
     const dest = `./client/app/${destApp}/${dir.join('/')}`.split('/')
     mkdirsSync(dest.slice(0, dest.length - 1).join('/'))
