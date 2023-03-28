@@ -37,10 +37,12 @@ ${false ? `menu.registerMenus([
 ])`: ''}
 `
     writeFileSync('./client/autoInit.js', template, { encoding: 'utf8' })
+    if (mode !== 'development') {
+      watcher.close()
+    }
   }
   return {
     name: 'vite-plugin-duxweb-page',
-    apply: 'serve',
     config(config, env) {
       mode = env.mode
     },
@@ -49,6 +51,7 @@ ${false ? `menu.registerMenus([
         ignored: [],
         persistent: true
       })
+
       watcher.on('ready', () => {
         ready = true
         createRouter(watcher)
@@ -68,6 +71,9 @@ ${false ? `menu.registerMenus([
 }
 
 const copy = () => {
+  // 当前是开发模式还是调试模式
+  let mode = 'development'
+  
   function mkdirsSync(dir) {
     if (existsSync(dir)) {
       return true
@@ -87,7 +93,9 @@ const copy = () => {
   }
   return {
     name: 'vite-plugin-duxweb-copy',
-    apply: 'serve',
+    config(config, env) {
+      mode = env.mode
+    },
     buildStart() {
       const watcher = chokidar.watch('./app/*/Client/**/*.*', {
         ignored: [],
@@ -102,6 +110,11 @@ const copy = () => {
       watcher.on('unlink', file => {
         editFile(file)
       })
+      if (mode !== 'development') {
+        setTimeout(() => {
+          watcher.close()
+        }, 3000)
+      }
     }
   }
 }
@@ -110,7 +123,6 @@ const config = () => {
   let mode = ''
   return {
     name: 'vite-plugin-duxweb-config',
-    apply: 'serve',
     config(config, env) {
       mode = env.mode
     },
