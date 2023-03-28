@@ -124,13 +124,16 @@ const config = () => {
         } else if (existsSync(url)) {
           config = parse(readFileSync(url, { encoding: 'utf8' }))
         }
-        // use 只读取链接地址
+        // use 只读取链接地址 调试模式使用代理，不生成请求地址
         if (name === 'use' && config.app) {
           config = {
             app: {
               domain: config.app.domain,
               websocket: config.app.websocket
             }
+          }
+          if (mode === 'development') {
+            config.app.domain = ''
           }
         }
         return [name, config]

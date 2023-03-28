@@ -1,6 +1,6 @@
 {
   "name": "duxweb-cli",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "DUX Web CLI",
   "main": "./index.js",
   "homepage": "https://github.com/ShaoGongBra/duxweb-cli",
