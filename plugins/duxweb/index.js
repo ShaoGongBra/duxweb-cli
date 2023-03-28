@@ -1,6 +1,7 @@
 const { sep, dirname } = require('path')
-const { writeFileSync, copyFileSync, constants, existsSync, mkdirSync } = require('fs')
+const { writeFileSync, copyFileSync, constants, existsSync, mkdirSync, readFileSync } = require('fs')
 const chokidar = require('chokidar')
+const { parse } = require('yaml')
 
 const pages = () => {
   // 当前是开发模式还是调试模式
@@ -105,4 +106,39 @@ const copy = () => {
   }
 }
 
-module.exports = () => [copy(), pages()]
+const config = () => {
+  let mode = ''
+  return {
+    name: 'vite-plugin-duxweb-config',
+    apply: 'serve',
+    config(config, env) {
+      mode = env.mode
+    },
+    buildStart() {
+      const configs = ['client', 'use'].map(name => {
+        let config = {}
+        const url = `./config/${name}.yaml`
+        const devUrl = `./config/${name}.dev.yaml`
+        if (mode === 'development' && existsSync(devUrl)) {
+          config = parse(readFileSync(devUrl, { encoding: 'utf8' }))
+        } else if (existsSync(url)) {
+          config = parse(readFileSync(url, { encoding: 'utf8' }))
+        }
+        // use 只读取链接地址
+        if (name === 'use' && config.app) {
+          config = {
+            app: {
+              domain: config.app.domain,
+              websocket: config.app.websocket
+            }
+          }
+        }
+        return [name, config]
+      })
+
+      writeFileSync('./client/config.json', JSON.stringify(Object.fromEntries(configs), null, 2), { encoding: 'utf8' })
+    }
+  }
+}
+
+module.exports = () => [copy(), pages(), config()]
