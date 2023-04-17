@@ -29,7 +29,7 @@ const pages = () => {
 ${list.map(v => `import { duxwebData as ${v[1]}${v[0]} } from './app/${v[0]}/${v[1]}'`).join('\n')}
 
 registerRoutes([
-  ${list.map(v => `['${v[1]}', '${v[0]}', ${v[1]}${v[0]}.route]`).join(',\n  ')}
+  ${list.map(v => `['${v[1]}', '${v[0]}', ${v[1]}${v[0]}.route, ${v[1]}${v[0]}.routeConfig]`).join(',\n  ')}
 ])
 
 ${false ? `menu.registerMenus([
