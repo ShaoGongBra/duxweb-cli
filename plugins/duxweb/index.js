@@ -158,4 +158,4 @@ const config = option => {
   }
 }
 
-module.exports = () => [copy(), pages(), config()]
+module.exports = options => [copy(), pages(), config(options?.config)]
