@@ -119,7 +119,7 @@ const copy = () => {
   }
 }
 
-const config = () => {
+const config = option => {
   let mode = ''
   return {
     name: 'vite-plugin-duxweb-config',
@@ -144,8 +144,10 @@ const config = () => {
               websocket: config.app.websocket
             }
           }
-          if (mode === 'development') {
-            config.app.domain = ''
+          if(!option?.disableProxy) {
+            if (mode === 'development') {
+              config.app.domain = ''
+            }
           }
         }
         return [name, config]
