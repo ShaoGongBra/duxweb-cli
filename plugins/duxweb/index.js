@@ -73,7 +73,7 @@ ${false ? `menu.registerMenus([
 const copy = () => {
   // 当前是开发模式还是调试模式
   let mode = 'development'
-  
+
   function mkdirsSync(dir) {
     if (existsSync(dir)) {
       return true
@@ -148,6 +148,9 @@ const config = option => {
             if (mode === 'development') {
               config.app.domain = ''
             }
+          }
+          if (typeof config.app.domain !== 'string') {
+            config.app.domain = ''
           }
         }
         return [name, config]
