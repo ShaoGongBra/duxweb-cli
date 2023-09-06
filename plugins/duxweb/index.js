@@ -140,11 +140,11 @@ const config = option => {
         if (name === 'use' && config.app) {
           config = {
             app: {
-              domain: config.app.domain,
-              websocket: config.app.websocket
+              domain: option?.app?.domain ?? config.app.domain,
+              websocket: option?.app?.websocket ?? config.app.websocket
             }
           }
-          if(!option?.disableProxy) {
+          if (!option?.disableProxy) {
             if (mode === 'development') {
               config.app.domain = ''
             }
